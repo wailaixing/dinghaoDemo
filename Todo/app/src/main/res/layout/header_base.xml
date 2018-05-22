@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:padding="@dimen/spacing_10"
-        android:text="代办事项"
+        android:text="@string/header_title"
         android:textColor="@color/gray_dark"
         android:textSize="@dimen/font_22"/>
 
