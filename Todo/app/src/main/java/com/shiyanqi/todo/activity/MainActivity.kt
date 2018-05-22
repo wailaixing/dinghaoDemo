@@ -7,24 +7,27 @@ import android.view.View
 import com.marktony.fanfouhandpick.interfaze.OnRecyclerViewOnClickListener
 import com.shiyanqi.todo.R
 import com.shiyanqi.todo.adapter.TaskInfoAdapter
-import com.shiyanqi.todo.bean.TaskBean
-import com.shiyanqi.todo.utils.DateUtils
+import com.shiyanqi.todo.db.Task
+import com.shiyanqi.todo.db.TaskTable
+import com.shiyanqi.todo.extensions.database
+import com.shiyanqi.todo.extensions.parseList
+import com.shiyanqi.todo.extensions.toVarargArray
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.header_base.*
+import org.jetbrains.anko.custom.async
+import org.jetbrains.anko.db.insert
+import org.jetbrains.anko.db.select
+import org.jetbrains.anko.db.delete
 import java.util.*
 
 class MainActivity: AppCompatActivity(), View.OnClickListener {
 
     private var adapter: TaskInfoAdapter? = null
-    private var tasksList = ArrayList<TaskBean>()
+    private var dbTasksList = ArrayList<Task>()
 
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-    }
-
-    override fun onResume() {
-        super.onResume()
         initView()
         loadData()
     }
@@ -41,20 +44,28 @@ class MainActivity: AppCompatActivity(), View.OnClickListener {
      * recycleView加载数据
      */
     private fun loadData() {
-        //测试数据
-        for(i in 1..5){
-            var task = TaskBean(DateUtils.fromatShortTime(Date().time), "测试数据" + i.toString())
-            tasksList.add(task)
+        this.database.use {
+            val list = select(com.shiyanqi.todo.db.TaskTable.TABLE_NAME)
+                    .parseList { com.shiyanqi.todo.db.Task(java.util.HashMap(it)) }
+            async{
+                if(null != list && list.size > 0){
+                    dbTasksList = list as ArrayList<Task>
+                    initTaskList()
+                }
+            }
         }
+    }
 
-        adapter = TaskInfoAdapter(this@MainActivity, tasksList)
-        rv_main.adapter = adapter
+    private fun initTaskList() {
+        adapter = TaskInfoAdapter(this@MainActivity, dbTasksList)
         adapter!!.setItemClickListener(object: OnRecyclerViewOnClickListener{
             override fun OnItemClick(v: View, position: Int) {
-                tasksList.removeAt(position)
+
+                dbTasksList.removeAt(position)
                 adapter!!.notifyDataSetChanged()
             }
         })
+        rv_main.adapter = adapter
     }
 
     override fun onClick(v: View?) {
@@ -65,14 +76,18 @@ class MainActivity: AppCompatActivity(), View.OnClickListener {
 
     private fun addNewTask() {
         if(null != edt_add_task.text.toString() && "" != edt_add_task.text.toString()){
-            tasksList.add(TaskBean(DateUtils.fromatShortTime(Date().time), edt_add_task.text.toString()))
+//            tasksList.add(TaskBean(DateUtils.fromatShortTime(Date().time), edt_add_task.text.toString()))
+            this.database.use {
+                val task = Task()
+                task.task = edt_add_task.text.toString()
+                task.time = Date().time
+                var taskId = insert(TaskTable.TABLE_NAME, *task.map.toVarargArray())
+                dbTasksList.add(Task(taskId, task.time, task.task))
+            }
             adapter!!.notifyDataSetChanged()
             edt_add_task.text.clear()
         }
-//        edt_add_task.text.toString()?.let {
-//            tasksList.add(TaskBean(DateUtils.fromatShortTime(Date().time), edt_add_task.text.toString()))
-//            adapter!!.notifyDataSetChanged()
-//        }
+
     }
 
 }

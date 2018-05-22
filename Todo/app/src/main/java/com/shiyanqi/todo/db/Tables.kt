@@ -1,7 +1,7 @@
 package com.shiyanqi.todo.db
 
 /**
- * Created by shiyanqi on 18/5/22.
+ * Created by vslimit on 17/1/25.
  */
 object TaskTable{
     val TABLE_NAME = "Task"

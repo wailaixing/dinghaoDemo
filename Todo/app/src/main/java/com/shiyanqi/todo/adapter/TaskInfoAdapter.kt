@@ -8,13 +8,15 @@ import android.view.ViewGroup
 import com.marktony.fanfouhandpick.interfaze.OnRecyclerViewOnClickListener
 import com.shiyanqi.todo.R
 import com.shiyanqi.todo.bean.TaskBean
+import com.shiyanqi.todo.db.Task
+import com.shiyanqi.todo.utils.DateUtils
 import kotlinx.android.synthetic.main.item_task_info.view.*
 
 /**
  * Created by shiyanqi on 18/5/22.
  */
 
-class TaskInfoAdapter(val context: Context , val list: List<TaskBean>) : RecyclerView.Adapter<TaskInfoAdapter.FanfouPostsViewHolder>() {
+class TaskInfoAdapter(val context: Context , val list: List<Task>) : RecyclerView.Adapter<TaskInfoAdapter.FanfouPostsViewHolder>() {
 
     private val inflater: LayoutInflater
 
@@ -34,7 +36,7 @@ class TaskInfoAdapter(val context: Context , val list: List<TaskBean>) : Recycle
         val item = list[position]
 
         holder.itemView.tv_task_content.text = item.task
-        holder.itemView.tv_task_time.text = item.time
+        holder.itemView.tv_task_time.text = DateUtils.fromatShortTime(item.time)
     }
 
     override fun getItemCount(): Int {

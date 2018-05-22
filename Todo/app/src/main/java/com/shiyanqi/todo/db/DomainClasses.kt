@@ -1,8 +1,11 @@
 package com.shiyanqi.todo.db
 
+import java.util.*
+
 /**
- * Created by shiyanqi on 18/5/22.
+ * Created by vslimit on 17/1/26.
  */
+
 data class Task(val map: MutableMap<String, Any?>) {
     var _id: Long by map
     var time: Long by map
@@ -17,3 +20,4 @@ data class Task(val map: MutableMap<String, Any?>) {
     }
 
 }
+
