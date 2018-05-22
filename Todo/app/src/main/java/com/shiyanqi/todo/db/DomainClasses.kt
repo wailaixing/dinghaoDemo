@@ -11,9 +11,9 @@ data class Task(val map: MutableMap<String, Any?>) {
     var time: Long by map
     var task: String by map
 
-    constructor(): this(HashMap()){}
+    constructor() : this(HashMap()) {}
 
-    constructor(id:Long, time: Long, task:String) : this(HashMap()) {
+    constructor(id: Long, time: Long, task: String) : this(HashMap()) {
         this._id = id
         this.time = time
         this.task = task

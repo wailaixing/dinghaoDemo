@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.marktony.fanfouhandpick.interfaze.OnRecyclerViewOnClickListener
 import com.shiyanqi.todo.R
-import com.shiyanqi.todo.bean.TaskBean
 import com.shiyanqi.todo.db.Task
 import com.shiyanqi.todo.utils.DateUtils
 import kotlinx.android.synthetic.main.item_task_info.view.*
@@ -16,7 +15,7 @@ import kotlinx.android.synthetic.main.item_task_info.view.*
  * Created by shiyanqi on 18/5/22.
  */
 
-class TaskInfoAdapter(val context: Context , val list: List<Task>) : RecyclerView.Adapter<TaskInfoAdapter.FanfouPostsViewHolder>() {
+class TaskInfoAdapter(val context: Context, val list: List<Task>) : RecyclerView.Adapter<TaskInfoAdapter.FanfouPostsViewHolder>() {
 
     private val inflater: LayoutInflater
 
@@ -43,11 +42,11 @@ class TaskInfoAdapter(val context: Context , val list: List<Task>) : RecyclerVie
         return list.size
     }
 
-    fun setItemClickListener(listener: OnRecyclerViewOnClickListener){
+    fun setItemClickListener(listener: OnRecyclerViewOnClickListener) {
         this.mListener = listener
     }
 
-    inner class FanfouPostsViewHolder(itemView: View,listener: OnRecyclerViewOnClickListener) : RecyclerView.ViewHolder(itemView),View.OnClickListener{
+    inner class FanfouPostsViewHolder(itemView: View, listener: OnRecyclerViewOnClickListener) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
         internal var listener: OnRecyclerViewOnClickListener
 
@@ -57,7 +56,7 @@ class TaskInfoAdapter(val context: Context , val list: List<Task>) : RecyclerVie
         }
 
         override fun onClick(p0: View?) {
-            listener.OnItemClick(p0!!,layoutPosition)
+            listener.OnItemClick(p0!!, layoutPosition)
         }
 
     }

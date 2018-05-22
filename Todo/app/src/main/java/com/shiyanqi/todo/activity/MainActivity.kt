@@ -20,12 +20,12 @@ import org.jetbrains.anko.db.select
 import org.jetbrains.anko.db.delete
 import java.util.*
 
-class MainActivity: AppCompatActivity(), View.OnClickListener {
+class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private var adapter: TaskInfoAdapter? = null
     private var dbTasksList = ArrayList<Task>()
 
-    override fun onCreate(savedInstanceState: Bundle?){
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initView()
@@ -35,7 +35,7 @@ class MainActivity: AppCompatActivity(), View.OnClickListener {
     /**
      * 初始化UI、点击事件
      */
-    fun initView(){
+    fun initView() {
         btn_add_task.setOnClickListener(this)
         rv_main.layoutManager = LinearLayoutManager(this)
     }
@@ -47,8 +47,8 @@ class MainActivity: AppCompatActivity(), View.OnClickListener {
         this.database.use {
             val list = select(com.shiyanqi.todo.db.TaskTable.TABLE_NAME)
                     .parseList { com.shiyanqi.todo.db.Task(java.util.HashMap(it)) }
-            async{
-                if(null != list && list.size > 0){
+            async {
+                if (null != list && list.size > 0) {
                     dbTasksList = list as ArrayList<Task>
                     initTaskList()
                 }
@@ -58,9 +58,11 @@ class MainActivity: AppCompatActivity(), View.OnClickListener {
 
     private fun initTaskList() {
         adapter = TaskInfoAdapter(this@MainActivity, dbTasksList)
-        adapter!!.setItemClickListener(object: OnRecyclerViewOnClickListener{
+        adapter!!.setItemClickListener(object : OnRecyclerViewOnClickListener {
             override fun OnItemClick(v: View, position: Int) {
-
+                this@MainActivity.database.use {
+                    delete(TaskTable.TABLE_NAME, "_id={_id}", Pair("_id", dbTasksList.get(position)._id))
+                }
                 dbTasksList.removeAt(position)
                 adapter!!.notifyDataSetChanged()
             }
@@ -69,14 +71,13 @@ class MainActivity: AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        when(v?.id){
+        when (v?.id) {
             R.id.btn_add_task -> addNewTask()
         }
     }
 
     private fun addNewTask() {
-        if(null != edt_add_task.text.toString() && "" != edt_add_task.text.toString()){
-//            tasksList.add(TaskBean(DateUtils.fromatShortTime(Date().time), edt_add_task.text.toString()))
+        if (null != edt_add_task.text.toString() && "" != edt_add_task.text.toString()) {
             this.database.use {
                 val task = Task()
                 task.task = edt_add_task.text.toString()
@@ -87,7 +88,6 @@ class MainActivity: AppCompatActivity(), View.OnClickListener {
             adapter!!.notifyDataSetChanged()
             edt_add_task.text.clear()
         }
-
     }
 
 }

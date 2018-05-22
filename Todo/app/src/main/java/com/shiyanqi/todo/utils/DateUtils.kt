@@ -5,9 +5,6 @@ import org.joda.time.DateTime
 import java.util.Calendar
 import java.util.Date
 
-/**
- * Created by hcl on 15/8/8.
- */
 object DateUtils {
 
     private val WEEK_DAYS = arrayOf("周日", "周一", "周二", "周三", "周四", "周五", "周六")
