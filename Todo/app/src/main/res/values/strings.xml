@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Todo</string>
+    <string name="edt_add_task">Adding a new item...</string>
+    <string name="btn_add_task">添加</string>
+</resources>
