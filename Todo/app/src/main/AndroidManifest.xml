@@ -20,6 +20,8 @@
         <activity android:name=".activity.MainActivity"
                   android:launchMode="singleTask"
                   android:screenOrientation="portrait"/>
+        <activity android:name=".activity.SearchTaskActivity"
+                  android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

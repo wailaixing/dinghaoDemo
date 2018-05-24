@@ -27,7 +27,7 @@ class TaskInfoAdapter(context: Context, val list: List<Task>) : RecyclerView.Ada
         val item = list[position]
 
         holder.itemView.tv_task_content.text = item.task
-        holder.itemView.tv_task_time.text = DateUtils.fromatShortTime(item.time)
+        holder.itemView.tv_task_time.text = DateUtils.fromatTime(item.time)
     }
 
     override fun getItemCount(): Int {

@@ -2,8 +2,10 @@
     <string name="app_name">Todo</string>
     <string name="edt_add_task">Adding a new item...</string>
     <string name="btn_add_task">添加</string>
+    <string name="btn_search_task">搜索</string>
     <string name="header_title">代办事项</string>
     <string name="tv_index_content">欢迎页</string>
+    <string name="hint_name_or_phone_text">搜索</string>
 
 
 </resources>

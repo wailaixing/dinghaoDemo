@@ -33,6 +33,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
 
     override fun setUpView() {
         btn_add_task.setOnClickListener(this)
+        btn_search_task.setOnClickListener(this)
         rv_main.layoutManager = LinearLayoutManager(this)
     }
 
@@ -74,7 +75,12 @@ class MainActivity : BaseActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.btn_add_task -> addNewTask()
+            R.id.btn_search_task -> searchTask()
         }
+    }
+
+    private fun searchTask() {
+        startActivity(Intent(this, SearchTaskActivity::class.java))
     }
 
     private fun addNewTask() {
