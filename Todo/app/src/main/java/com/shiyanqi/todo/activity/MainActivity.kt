@@ -20,8 +20,6 @@ import java.util.*
 import android.content.Intent
 import com.shiyanqi.todo.constants.ConstantValues
 import org.jetbrains.anko.doAsync
-import io.reactivex.Observable
-import io.reactivex.ObservableOnSubscribe
 
 class MainActivity : BaseActivity(), View.OnClickListener {
 

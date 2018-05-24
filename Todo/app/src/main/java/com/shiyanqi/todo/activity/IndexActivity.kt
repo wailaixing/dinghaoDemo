@@ -4,6 +4,7 @@ import android.os.Bundle
 import com.shiyanqi.todo.R
 import com.shiyanqi.todo.base.BaseActivity
 import android.content.Intent
+import android.view.View
 import com.shiyanqi.todo.App
 import com.shiyanqi.todo.constants.ConstantValues
 import io.reactivex.*
@@ -13,7 +14,7 @@ import kotlinx.android.synthetic.main.activity_index.*
 import java.util.concurrent.TimeUnit
 
 
-class IndexActivity : BaseActivity() {
+class IndexActivity : BaseActivity(), View.OnClickListener {
 
     var mDisposable: Disposable? = null
 
@@ -24,7 +25,7 @@ class IndexActivity : BaseActivity() {
 
     override fun getLayoutId(): Int = R.layout.activity_index
 
-    override fun setUpView() = Unit
+    override fun setUpView() = tv_count_down.setOnClickListener(this@IndexActivity)
 
     override fun setUpData() = doSomeThing()
 
@@ -40,7 +41,7 @@ class IndexActivity : BaseActivity() {
                     }
 
                     override fun onNext(aLong: Long?) {
-                        tv_count_down.text = "${aLong}秒"
+                        tv_count_down.text = "${aLong}秒  跳过"
                     }
 
                     override fun onComplete() {
@@ -53,6 +54,20 @@ class IndexActivity : BaseActivity() {
                         t?.printStackTrace()
                     }
                 })
+    }
+
+    override fun onClick(v: View?) {
+        when(v?.id){
+            R.id.tv_count_down -> skip()
+        }
+    }
+
+    private fun skip() {
+        if (!mDisposable!!.isDisposed) {
+            mDisposable!!.dispose()
+            startActivity(Intent(this@IndexActivity, MainActivity::class.java))
+            finish()
+        }
     }
 
 }

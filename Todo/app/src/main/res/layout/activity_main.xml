@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,9 +14,9 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/spacing_50"
         android:hint="@string/edt_add_task"
+        android:background="@null"
         android:layout_marginLeft="@dimen/spacing_4"
-        android:textColorHint="@color/gray"
-        android:background="@null" />
+        android:textColorHint="@color/gray"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_main"
