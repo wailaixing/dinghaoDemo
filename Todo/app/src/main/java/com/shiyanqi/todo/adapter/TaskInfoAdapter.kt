@@ -42,7 +42,7 @@ class TaskInfoAdapter(context: Context, private val list: List<Task>) : Recycler
             itemView.setOnClickListener(this)
         }
 
-        override fun onClick(p0: View?) = listener.OnItemClick(p0!!, layoutPosition)
+        override fun onClick(p0: View?) = listener.onItemClick(p0!!, layoutPosition)
 
     }
 }

@@ -16,10 +16,16 @@ import kotlinx.android.synthetic.main.header_base.*
 import org.jetbrains.anko.db.insert
 import org.jetbrains.anko.db.select
 import org.jetbrains.anko.db.delete
-import java.util.*
 import android.content.Intent
 import com.shiyanqi.todo.constants.ConstantValues
-import org.jetbrains.anko.doAsync
+import com.shiyanqi.todo.utils.ToastUtils
+import io.reactivex.Observable
+import io.reactivex.ObservableOnSubscribe
+import io.reactivex.Observer
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
+import java.util.*
 
 class MainActivity : BaseActivity(), View.OnClickListener {
 
@@ -34,41 +40,58 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         rv_main.layoutManager = LinearLayoutManager(this)
     }
 
-    override fun setUpData() {
-        loadData()
-    }
-
+    override fun setUpData() = loadData()
 
     /**
      * recycleView加载数据
      */
-    private fun loadData() {
-        this.database.use {
+    private fun loadData() = Observable.create(ObservableOnSubscribe<List<Task>> { e ->
+        this@MainActivity.database.use {
             val list = select(com.shiyanqi.todo.db.TaskTable.TABLE_NAME)
                     .parseList { com.shiyanqi.todo.db.Task(java.util.HashMap(it)) }
-            doAsync {
-                if (list.isNotEmpty()) {
+            e!!.onNext(list)
+        }
+    }).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread(), false, 100)
+            .subscribe(object : Observer<List<Task>> {
+                override fun onError(p0: Throwable?) = ToastUtils.showShortToast(R.string.text_load_task_error)
+
+                override fun onSubscribe(p0: Disposable?) = Unit
+
+                override fun onNext(list: List<Task>?) {
                     dbTasksList = list as ArrayList<Task>
                     initTaskList()
                 }
-            }
-        }
-    }
 
-    private fun SyncData(){
+                override fun onComplete() = Unit
 
-    }
+            })
 
     private fun initTaskList() {
         adapter = TaskInfoAdapter(this@MainActivity, dbTasksList)
         adapter!!.setItemClickListener(object : OnRecyclerViewOnClickListener {
-            override fun OnItemClick(v: View, position: Int) {
-                this@MainActivity.database.use {
-                    delete(TaskTable.TABLE_NAME, "_id={_id}", Pair("_id", dbTasksList[position]._id))
-                }
-                dbTasksList.removeAt(position)
-                adapter!!.notifyDataSetChanged()
-            }
+            override fun onItemClick(v: View, position: Int) =
+                    Observable.create(ObservableOnSubscribe<Int> { e ->
+                        this@MainActivity.database.use {
+                            val result = delete(TaskTable.TABLE_NAME, "_id={_id}", Pair("_id", dbTasksList[position]._id))
+                            e.onNext(result)
+                        }
+                    }).subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread(), false, 100)
+                            .subscribe(object : Observer<Int> {
+                                override fun onError(p0: Throwable?) = ToastUtils.showShortToast(R.string.text_delete_task_error)
+
+                                override fun onSubscribe(p0: Disposable?) = Unit
+
+                                override fun onNext(taskId: Int?) {
+                                    dbTasksList.removeAt(position)
+                                    adapter!!.notifyDataSetChanged()
+                                    ToastUtils.showShortToast(R.string.text_delete_task_complete)
+                                }
+
+                                override fun onComplete() = Unit
+
+                            })
         })
         rv_main.adapter = adapter
     }
@@ -82,18 +105,38 @@ class MainActivity : BaseActivity(), View.OnClickListener {
 
     private fun searchTask() = startActivity(Intent(this, SearchTaskActivity::class.java))
 
-    private fun addNewTask() {
-        if ("" != edt_add_task.text.toString()) {
-            this.database.use {
-                val task = Task()
-                task.task = edt_add_task.text.toString()
-                task.time = Date().time
+    /**
+     * 添加代办事项
+     */
+    private fun addNewTask() = if ("" != edt_add_task.text.toString()) {
+        val task = Task()
+        task.task = edt_add_task.text.toString()
+        task.time = Date().time
+
+        Observable.create(ObservableOnSubscribe<Long> { e ->
+            this@MainActivity.database.use {
                 val taskId = insert(TaskTable.TABLE_NAME, *task.map.toVarargArray())
-                dbTasksList.add(Task(taskId, task.time, task.task))
+                e!!.onNext(taskId)
             }
-            adapter!!.notifyDataSetChanged()
-            edt_add_task.text.clear()
-        }
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread(), false, 100)
+                .subscribe(object : Observer<Long> {
+                    override fun onError(p0: Throwable?) = ToastUtils.showShortToast(R.string.text_add_task_error)
+
+                    override fun onSubscribe(p0: Disposable?) = Unit
+
+                    override fun onNext(taskId: Long?) {
+                        dbTasksList.add(Task(taskId!!, task.time, task.task))
+                        adapter!!.notifyDataSetChanged()
+                        edt_add_task.text.clear()
+                        ToastUtils.showShortToast(R.string.text_add_task_complete)
+                    }
+
+                    override fun onComplete() = Unit
+
+                })
+    }else{
+        ToastUtils.showShortToast(R.string.text_input_empty_hint)
     }
 
     override fun protectApp() {
