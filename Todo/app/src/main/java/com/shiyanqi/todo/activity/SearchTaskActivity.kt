@@ -8,9 +8,7 @@ import com.shiyanqi.todo.base.BaseActivity
  */
 class SearchTaskActivity: BaseActivity(){
 
-    override fun getLayoutId(): Int {
-        return R.layout.activity_search_task
-    }
+    override fun getLayoutId(): Int = R.layout.activity_search_task
 
     override fun setUpView() {
 

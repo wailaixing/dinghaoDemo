@@ -5,6 +5,10 @@ package com.shiyanqi.todo.constants
  */
 
 object ConstantValues {
+    //启动页读秒
+    val INDEX_COUNT_DOWN_SECOND = 5L
+
+
     val STATUS_FORCE_KILLED = -1
     val STATUS_LOGOUT = 0
     val STATUS_OFFLINE = 1

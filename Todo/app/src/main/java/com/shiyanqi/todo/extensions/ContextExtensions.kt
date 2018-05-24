@@ -18,7 +18,7 @@ package com.shiyanqi.todo.extensions
 
 import android.content.Context
 import android.support.v4.content.ContextCompat
-import com.vslimit.kotlindemo.db.DatabaseOpenHelper
+import com.shiyanqi.todo.db.DatabaseOpenHelper
 
 fun Context.color(res: Int): Int = ContextCompat.getColor(this, res)
 

@@ -11,7 +11,7 @@ import com.shiyanqi.todo.db.Task
 import com.shiyanqi.todo.utils.DateUtils
 import kotlinx.android.synthetic.main.item_task_info.view.*
 
-class TaskInfoAdapter(context: Context, val list: List<Task>) : RecyclerView.Adapter<TaskInfoAdapter.FanfouPostsViewHolder>() {
+class TaskInfoAdapter(context: Context, private val list: List<Task>) : RecyclerView.Adapter<TaskInfoAdapter.FanfouPostsViewHolder>() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
@@ -30,23 +30,19 @@ class TaskInfoAdapter(context: Context, val list: List<Task>) : RecyclerView.Ada
         holder.itemView.tv_task_time.text = DateUtils.fromatTime(item.time)
     }
 
-    override fun getItemCount(): Int {
-        return list.size
-    }
+    override fun getItemCount(): Int = list.size
 
     fun setItemClickListener(listener: OnRecyclerViewOnClickListener) {
         this.mListener = listener
     }
 
-    inner class FanfouPostsViewHolder(itemView: View, internal var listener: OnRecyclerViewOnClickListener) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    inner class FanfouPostsViewHolder(itemView: View, private var listener: OnRecyclerViewOnClickListener) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
         init {
             itemView.setOnClickListener(this)
         }
 
-        override fun onClick(p0: View?) {
-            listener.OnItemClick(p0!!, layoutPosition)
-        }
+        override fun onClick(p0: View?) = listener.OnItemClick(p0!!, layoutPosition)
 
     }
 }

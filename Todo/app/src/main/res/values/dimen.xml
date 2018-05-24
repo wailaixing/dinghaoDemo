@@ -5,6 +5,7 @@
     <dimen name="font_18">18sp</dimen>
     <dimen name="font_16">16sp</dimen>
     <dimen name="font_15">15sp</dimen>
+    <dimen name="font_14">14sp</dimen>
     <dimen name="font_12">12sp</dimen>
 
     <!-- typical spacing between two views -->
@@ -12,8 +13,10 @@
     <dimen name="spacing_50">50dp</dimen>
     <dimen name="spacing_40">40dp</dimen>
     <dimen name="spacing_24">24dp</dimen>
+    <dimen name="spacing_16">16dp</dimen>
     <dimen name="spacing_14">14dp</dimen>
     <dimen name="spacing_10">10dp</dimen>
+    <dimen name="spacing_8">8dp</dimen>
     <dimen name="spacing_4">4dp</dimen>
 
     <dimen name="tv_height_60">60dp</dimen>
@@ -30,5 +33,12 @@
     <dimen name="button_height_40">40dp</dimen>
     <dimen name="button_height_32">32dp</dimen>
     <dimen name="button_width_80">80dp</dimen>
+
+    <dimen name="badge_radius_80">80dp</dimen>
+    <dimen name="badge_radius_60">60dp</dimen>
+    <dimen name="badge_radius_40">40dp</dimen>
+    <dimen name="badge_radius_20">20dp</dimen>
+    <dimen name="badge_radius_10">10dp</dimen>
+
 
 </resources>

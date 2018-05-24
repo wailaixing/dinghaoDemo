@@ -20,16 +20,15 @@ import java.util.*
 import android.content.Intent
 import com.shiyanqi.todo.constants.ConstantValues
 import org.jetbrains.anko.doAsync
-
+import io.reactivex.Observable
+import io.reactivex.ObservableOnSubscribe
 
 class MainActivity : BaseActivity(), View.OnClickListener {
 
     private var adapter: TaskInfoAdapter? = null
     private var dbTasksList = ArrayList<Task>()
 
-    override fun getLayoutId(): Int {
-        return R.layout.activity_main
-    }
+    override fun getLayoutId(): Int = R.layout.activity_main
 
     override fun setUpView() {
         btn_add_task.setOnClickListener(this)
@@ -58,6 +57,10 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
+    private fun SyncData(){
+
+    }
+
     private fun initTaskList() {
         adapter = TaskInfoAdapter(this@MainActivity, dbTasksList)
         adapter!!.setItemClickListener(object : OnRecyclerViewOnClickListener {
@@ -79,9 +82,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
-    private fun searchTask() {
-        startActivity(Intent(this, SearchTaskActivity::class.java))
-    }
+    private fun searchTask() = startActivity(Intent(this, SearchTaskActivity::class.java))
 
     private fun addNewTask() {
         if ("" != edt_add_task.text.toString()) {

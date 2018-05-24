@@ -11,4 +11,19 @@
         android:textSize="@dimen/font_22"
         android:layout_centerInParent="true"/>
 
+    <TextView
+        android:id="@+id/tv_count_down"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/spacing_24"
+        android:layout_marginRight="@dimen/spacing_24"
+        android:paddingLeft="@dimen/spacing_10"
+        android:paddingRight="@dimen/spacing_10"
+        android:paddingBottom="@dimen/spacing_4"
+        android:paddingTop="@dimen/spacing_4"
+        android:textSize="@dimen/font_16"
+        android:background="@drawable/bg_count_down"/>
+
 </RelativeLayout>
