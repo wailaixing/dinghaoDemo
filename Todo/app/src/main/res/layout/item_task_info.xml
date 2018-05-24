@@ -27,7 +27,7 @@
         android:ellipsize="end"
         android:singleLine="true"
         android:text="2018/5/23"
-        android:textSize="@dimen/font_16"
+        android:textSize="@dimen/font_12"
         android:textColor="@color/gray_dark"
         android:layout_marginRight="@dimen/spacing_4"/>
 

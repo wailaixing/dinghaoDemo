@@ -1,12 +1,14 @@
 package com.shiyanqi.todo
 
 import android.app.Application
+import com.shiyanqi.todo.constants.ConstantValues
 import kotlin.properties.Delegates
 
-/**
- * Created by shiyanqi on 18/5/22.
- */
 class App: Application() {
+
+    //app被强杀
+    @JvmField var mAppStatus: Int = ConstantValues.STATUS_FORCE_KILLED
+
     companion object {
         var instance: App by Delegates.notNull()
     }

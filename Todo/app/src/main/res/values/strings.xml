@@ -3,6 +3,7 @@
     <string name="edt_add_task">Adding a new item...</string>
     <string name="btn_add_task">添加</string>
     <string name="header_title">代办事项</string>
+    <string name="tv_index_content">欢迎页</string>
 
 
 </resources>

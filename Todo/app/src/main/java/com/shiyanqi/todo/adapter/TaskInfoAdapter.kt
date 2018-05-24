@@ -11,19 +11,11 @@ import com.shiyanqi.todo.db.Task
 import com.shiyanqi.todo.utils.DateUtils
 import kotlinx.android.synthetic.main.item_task_info.view.*
 
-/**
- * Created by shiyanqi on 18/5/22.
- */
+class TaskInfoAdapter(context: Context, val list: List<Task>) : RecyclerView.Adapter<TaskInfoAdapter.FanfouPostsViewHolder>() {
 
-class TaskInfoAdapter(val context: Context, val list: List<Task>) : RecyclerView.Adapter<TaskInfoAdapter.FanfouPostsViewHolder>() {
-
-    private val inflater: LayoutInflater
+    private val inflater: LayoutInflater = LayoutInflater.from(context)
 
     private var mListener: OnRecyclerViewOnClickListener? = null
-
-    init {
-        this.inflater = LayoutInflater.from(context)
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FanfouPostsViewHolder? {
         val view: View = inflater.inflate(R.layout.item_task_info, parent, false)
@@ -46,12 +38,9 @@ class TaskInfoAdapter(val context: Context, val list: List<Task>) : RecyclerView
         this.mListener = listener
     }
 
-    inner class FanfouPostsViewHolder(itemView: View, listener: OnRecyclerViewOnClickListener) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
-
-        internal var listener: OnRecyclerViewOnClickListener
+    inner class FanfouPostsViewHolder(itemView: View, internal var listener: OnRecyclerViewOnClickListener) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
         init {
-            this.listener = listener
             itemView.setOnClickListener(this)
         }
 
