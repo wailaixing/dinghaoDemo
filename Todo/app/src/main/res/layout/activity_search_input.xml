@@ -5,17 +5,14 @@
     android:layout_height="35dp"
     android:layout_margin="10dp">
 
-    <TextView
-        android:id="@+id/search_text"
-        android:layout_height="match_parent"
+    <EditText
+        android:id="@+id/edt_add_task"
         android:layout_width="match_parent"
-        android:background="@drawable/bg_search_edit"
-        android:gravity="center_vertical|left"
-        android:hint="@string/hint_name_or_phone_text"
-        android:paddingLeft="30dp"
-        android:textColor="#99BDBDBD"
-        android:textSize="14sp"
-        tools:ignore="RtlHardcoded,RtlSymmetry" />
+        android:layout_height="@dimen/spacing_50"
+        android:hint="@string/edt_add_task"
+        android:background="@null"
+        android:layout_marginLeft="@dimen/spacing_4"
+        android:textColorHint="@color/gray"/>
 
     <ImageView
         android:layout_height="wrap_content"

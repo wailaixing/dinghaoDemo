@@ -17,6 +17,8 @@ import org.jetbrains.anko.db.insert
 import org.jetbrains.anko.db.select
 import org.jetbrains.anko.db.delete
 import android.content.Intent
+import android.text.Editable
+import android.text.TextWatcher
 import com.shiyanqi.todo.constants.ConstantValues
 import com.shiyanqi.todo.utils.ToastUtils
 import io.reactivex.Observable
@@ -27,7 +29,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 
-class MainActivity : BaseActivity(), View.OnClickListener {
+class MainActivity : BaseActivity(), View.OnClickListener, TextWatcher, OnRecyclerViewOnClickListener {
 
     private var adapter: TaskInfoAdapter? = null
     private var dbTasksList = ArrayList<Task>()
@@ -37,7 +39,11 @@ class MainActivity : BaseActivity(), View.OnClickListener {
     override fun setUpView() {
         btn_add_task.setOnClickListener(this)
         btn_search_task.setOnClickListener(this)
+        edt_add_task.addTextChangedListener(this)
         rv_main.layoutManager = LinearLayoutManager(this)
+        adapter = TaskInfoAdapter(this@MainActivity, dbTasksList)
+        adapter!!.setItemClickListener(this)
+        rv_main.adapter = adapter
     }
 
     override fun setUpData() = loadData()
@@ -60,41 +66,13 @@ class MainActivity : BaseActivity(), View.OnClickListener {
 
                 override fun onNext(list: List<Task>?) {
                     dbTasksList = list as ArrayList<Task>
-                    initTaskList()
+                    adapter!!.setTasks(dbTasksList)
                 }
 
                 override fun onComplete() = Unit
 
             })
 
-    private fun initTaskList() {
-        adapter = TaskInfoAdapter(this@MainActivity, dbTasksList)
-        adapter!!.setItemClickListener(object : OnRecyclerViewOnClickListener {
-            override fun onItemClick(v: View, position: Int) =
-                    Observable.create(ObservableOnSubscribe<Int> { e ->
-                        this@MainActivity.database.use {
-                            val result = delete(TaskTable.TABLE_NAME, "_id={_id}", Pair("_id", dbTasksList[position]._id))
-                            e.onNext(result)
-                        }
-                    }).subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread(), false, 100)
-                            .subscribe(object : Observer<Int> {
-                                override fun onError(p0: Throwable?) = ToastUtils.showShortToast(R.string.text_delete_task_error)
-
-                                override fun onSubscribe(p0: Disposable?) = Unit
-
-                                override fun onNext(taskId: Int?) {
-                                    dbTasksList.removeAt(position)
-                                    adapter!!.notifyDataSetChanged()
-                                    ToastUtils.showShortToast(R.string.text_delete_task_complete)
-                                }
-
-                                override fun onComplete() = Unit
-
-                            })
-        })
-        rv_main.adapter = adapter
-    }
 
     override fun onClick(v: View?) {
         when (v?.id) {
@@ -103,12 +81,32 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
+    override fun onItemClick(v: View, position: Int) =
+            Observable.create(ObservableOnSubscribe<Int> { e ->
+                this@MainActivity.database.use {
+                    val result = delete(TaskTable.TABLE_NAME, "_id={_id}", Pair("_id", dbTasksList[position]._id))
+                    e.onNext(result)
+                    e.onComplete()
+                }
+            }).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread(), false, 100)
+                    .subscribe(object : Observer<Int> {
+                        override fun onError(p0: Throwable?) = ToastUtils.showShortToast(R.string.text_delete_task_error)
+
+                        override fun onSubscribe(p0: Disposable?) = Unit
+
+                        override fun onNext(taskId: Int?) = adapter!!.removeTask(position)
+
+                        override fun onComplete() = ToastUtils.showShortToast(R.string.text_delete_task_complete)
+
+                    })
+
     private fun searchTask() = startActivity(Intent(this, SearchTaskActivity::class.java))
 
     /**
      * 添加代办事项
      */
-    private fun addNewTask() = if ("" != edt_add_task.text.toString()) {
+    private fun addNewTask() = if ("" != edt_add_task.text.toString() && edt_add_task.text.toString().length > 2) {
         val task = Task()
         task.task = edt_add_task.text.toString()
         task.time = Date().time
@@ -117,6 +115,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
             this@MainActivity.database.use {
                 val taskId = insert(TaskTable.TABLE_NAME, *task.map.toVarargArray())
                 e!!.onNext(taskId)
+                e.onComplete()
             }
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread(), false, 100)
@@ -126,16 +125,14 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                     override fun onSubscribe(p0: Disposable?) = Unit
 
                     override fun onNext(taskId: Long?) {
-                        dbTasksList.add(Task(taskId!!, task.time, task.task))
-                        adapter!!.notifyDataSetChanged()
+                        adapter!!.addTask(Task(taskId!!, task.time, task.task))
                         edt_add_task.text.clear()
-                        ToastUtils.showShortToast(R.string.text_add_task_complete)
                     }
 
-                    override fun onComplete() = Unit
+                    override fun onComplete() = ToastUtils.showShortToast(R.string.text_add_task_complete)
 
                 })
-    }else{
+    } else {
         ToastUtils.showShortToast(R.string.text_input_empty_hint)
     }
 
@@ -151,5 +148,17 @@ class MainActivity : BaseActivity(), View.OnClickListener {
             ConstantValues.ACTION_RESTART_APP -> protectApp()
         }
     }
+
+    override fun afterTextChanged(s: Editable?) = Unit
+
+    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+
+    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) =
+            if (s!!.length > 2) {
+                btn_add_task.setTextColor(R.color.blue)
+            } else {
+                btn_add_task.setTextColor(R.color.gray_dark)
+            }
+
 
 }

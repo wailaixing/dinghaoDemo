@@ -5,8 +5,19 @@
               android:layout_height="match_parent">
 
     <!-- 搜索 -->
-    <include
-        android:id="@+id/search_bar"
-        layout="@layout/activity_search_input" />
+    <EditText
+        android:id="@+id/edt_search_task"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/spacing_50"
+        android:hint="@string/edt_add_task"
+        android:background="@null"
+        android:layout_marginLeft="@dimen/spacing_4"
+        android:textColorHint="@color/gray"/>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_search_result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>

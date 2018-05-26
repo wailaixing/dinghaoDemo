@@ -2,33 +2,31 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/tv_task_content"
-        android:layout_width="@dimen/tv_width_0"
-        android:layout_weight="3"
-        android:layout_height="@dimen/tv_height_40"
-        android:gravity="center_vertical"
-        android:text="@string/app_name"
-        android:textSize="@dimen/font_18"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/spacing_10"
+        android:layout_weight="1"
         android:ellipsize="end"
+        android:gravity="center_vertical"
         android:singleLine="true"
+        android:text="@string/app_name"
         android:textColor="@color/gray_dark"
-        android:layout_marginLeft="@dimen/spacing_10"/>
+        android:textSize="@dimen/font_22"/>
 
     <TextView
         android:id="@+id/tv_task_time"
-        android:layout_width="@dimen/tv_width_0"
-        android:layout_weight="1"
-        android:layout_height="@dimen/tv_height_40"
-        android:gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
         android:ellipsize="end"
         android:singleLine="true"
         android:text="2018/5/23"
-        android:textSize="@dimen/font_12"
         android:textColor="@color/gray_dark"
-        android:layout_marginRight="@dimen/spacing_4"/>
+        android:textSize="@dimen/font_18"/>
+
 
 </LinearLayout>

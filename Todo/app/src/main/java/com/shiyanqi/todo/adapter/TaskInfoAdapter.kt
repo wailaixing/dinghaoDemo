@@ -11,7 +11,9 @@ import com.shiyanqi.todo.db.Task
 import com.shiyanqi.todo.utils.DateUtils
 import kotlinx.android.synthetic.main.item_task_info.view.*
 
-class TaskInfoAdapter(context: Context, private val list: List<Task>) : RecyclerView.Adapter<TaskInfoAdapter.FanfouPostsViewHolder>() {
+class TaskInfoAdapter(context: Context, list: MutableList<Task>) : RecyclerView.Adapter<TaskInfoAdapter.FanfouPostsViewHolder>() {
+
+    private var tasks: MutableList<Task> = list
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
@@ -24,13 +26,13 @@ class TaskInfoAdapter(context: Context, private val list: List<Task>) : Recycler
 
     override fun onBindViewHolder(holder: FanfouPostsViewHolder, position: Int) {
 
-        val item = list[position]
+        val item = tasks[position]
 
         holder.itemView.tv_task_content.text = item.task
         holder.itemView.tv_task_time.text = DateUtils.fromatTime(item.time)
     }
 
-    override fun getItemCount(): Int = list.size
+    override fun getItemCount(): Int = tasks.size
 
     fun setItemClickListener(listener: OnRecyclerViewOnClickListener) {
         this.mListener = listener
@@ -45,4 +47,25 @@ class TaskInfoAdapter(context: Context, private val list: List<Task>) : Recycler
         override fun onClick(p0: View?) = listener.onItemClick(p0!!, layoutPosition)
 
     }
+
+    fun setTasks(tasks: MutableList<Task>){
+        this.tasks = tasks
+        notifyDataSetChanged()
+    }
+
+    fun addTask(task: Task) {
+        this.tasks.add(task)
+        notifyDataSetChanged()
+    }
+
+    fun addTasks(tasks: MutableList<Task>) {
+        this.tasks.addAll(tasks)
+        notifyDataSetChanged()
+    }
+
+    fun removeTask(position: Int) {
+        tasks!!.removeAt(position)
+        notifyDataSetChanged()
+    }
+
 }

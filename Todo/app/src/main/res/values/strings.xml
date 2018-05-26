@@ -7,11 +7,12 @@
     <string name="tv_index_content">欢迎页</string>
     <string name="hint_name_or_phone_text">搜索</string>
     <string name="text_load_task_error">加载数据失败</string>
-    <string name="text_input_empty_hint">输入不可为空</string>
+    <string name="text_search_task_error">搜索数据失败</string>
+    <string name="text_input_empty_hint">输入不可为空或小于两个字符</string>
     <string name="text_add_task_error">添加事项失败</string>
     <string name="text_add_task_complete">添加事项完成</string>
     <string name="text_delete_task_error">删除事项失败</string>
     <string name="text_delete_task_complete">删除事项完成</string>
-
+    <string name="edt_search_task">搜索事项</string>
 
 </resources>
