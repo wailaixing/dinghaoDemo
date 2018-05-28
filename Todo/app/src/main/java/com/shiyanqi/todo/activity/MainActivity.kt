@@ -17,6 +17,7 @@ import org.jetbrains.anko.db.insert
 import org.jetbrains.anko.db.select
 import org.jetbrains.anko.db.delete
 import android.content.Intent
+import android.graphics.Color
 import android.text.Editable
 import android.text.TextWatcher
 import com.shiyanqi.todo.constants.ConstantValues
@@ -155,9 +156,9 @@ class MainActivity : BaseActivity(), View.OnClickListener, TextWatcher, OnRecycl
 
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) =
             if (s!!.length > 2) {
-                btn_add_task.setTextColor(R.color.blue)
+                btn_add_task.setTextColor(Color.rgb(91, 154, 250))
             } else {
-                btn_add_task.setTextColor(R.color.gray_dark)
+                btn_add_task.setTextColor(Color.rgb(95, 95, 95))
             }
 
 
